@@ -3,9 +3,13 @@ package main
 import (
 	"log"
 	"net/http"
+
+	"almoxarifado-backend/config"
 )
 
 func main() {
+	cfg := config.Load()
+
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
@@ -13,6 +17,6 @@ func main() {
 		w.Write([]byte("API OK"))
 	})
 
-	log.Println("Starting server on :8080")
-	log.Fatal(http.ListenAndServe(":8080", mux))
+	log.Printf("API running on port %s", cfg.AppPort)
+	log.Fatal(http.ListenAndServe(":"+cfg.AppPort, mux))
 }
