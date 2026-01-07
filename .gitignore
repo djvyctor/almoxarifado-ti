@@ -1,1 +1,45 @@
 .env
+
+# Go binaries and build output
+*.exe
+*.dll
+*.so
+*.dylib
+*.out
+
+# Go build directories
+/bin/
+/pkg/
+
+# Vendor directory
+vendor/
+
+# Environment files
+.env.local
+.env.*.local
+
+# Docker
+docker-compose.override.yml
+Dockerfile.dev
+
+# IDEs
+.vscode/
+.idea/
+
+# macOS
+.DS_Store
+
+# Logs
+*.log
+
+# Frontend
+/frontend/node_modules/
+/frontend/dist/
+/frontend/build/
+
+# Misc
+.history/
+Thumbs.db
+
+# Prevent committing compiled api binary
+/api
