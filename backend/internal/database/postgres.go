@@ -4,10 +4,8 @@ import (
 	"almoxarifado-backend/config"
 	"database/sql"
 	"fmt"
+	"os"
 
-	"github.com/golang-migrate/migrate/v4"
-	"github.com/golang-migrate/migrate/v4/database/postgres"
-	_ "github.com/golang-migrate/migrate/v4/source/file"
 	_ "github.com/lib/pq"
 )
 
@@ -34,20 +32,24 @@ func Connect(cfg *config.Config) (*sql.DB, error) {
 }
 
 func RunMigrations(db *sql.DB, dbURL string) error {
-	driver, err := postgres.WithInstance(db, &postgres.Config{})
+	// Ler e executar 001_create_itens_table.sql
+	migration1, err := os.ReadFile("internal/database/migrations/001_create_itens_table.sql")
 	if err != nil {
-		return err
+		return fmt.Errorf("erro ao ler migration 001: %v", err)
 	}
 
-	m, err := migrate.NewWithDatabaseInstance(
-		"file://internal/database/migrations",
-		"postgres", driver)
-	if err != nil {
-		return err
+	if _, err := db.Exec(string(migration1)); err != nil {
+		return fmt.Errorf("erro ao executar migration 001: %v", err)
 	}
 
-	if err := m.Up(); err != nil && err != migrate.ErrNoChange {
-		return err
+	// Ler e executar 002_create_admins_table.sql
+	migration2, err := os.ReadFile("internal/database/migrations/002_create_admins_table.sql")
+	if err != nil {
+		return fmt.Errorf("erro ao ler migration 002: %v", err)
+	}
+
+	if _, err := db.Exec(string(migration2)); err != nil {
+		return fmt.Errorf("erro ao executar migration 002: %v", err)
 	}
 
 	return nil

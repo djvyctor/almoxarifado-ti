@@ -12,9 +12,13 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 \
 
 FROM alpine:latest
 
+# Instalar ca-certificates para o migrate funcionar
+RUN apk --no-cache add ca-certificates
+
 WORKDIR /app
 
 COPY --from=builder /app/api .
+COPY --from=builder /app/internal/database/migrations ./internal/database/migrations
 
 EXPOSE 8080
 
