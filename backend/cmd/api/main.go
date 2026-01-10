@@ -24,6 +24,12 @@ func main() {
 
 	log.Println("🐘 connected to postgres")
 
+	// Executando migrations
+	if err := database.RunMigrations(db, cfg.DatabaseURL()); err != nil {
+		log.Fatal("erro ao executar migrations:", err)
+	}
+	log.Println("✅ migrations executed")
+
 	// Inicializando repositórios, serviços e handlers
 	itemRepo := repositories.NewItemRepository(db)
 	itemService := services.NewItemService(itemRepo)
