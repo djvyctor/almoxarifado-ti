@@ -15,6 +15,7 @@ type LoginRequest struct {
 }
 
 type LoginResponse struct {
-	Token string `json:"token"`
-	Admin Admin  `json:"admin"`
+	Token   string `json:"token"`
+	Type    string `json:"type"`
+	Expires int64  `json:"expires"`
 }

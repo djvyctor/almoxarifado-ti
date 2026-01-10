@@ -34,23 +34,30 @@ func (s *AuthService) Login(username, password string) (*models.LoginResponse, e
 	}
 
 	// 3. Gerar token
-	token, err := s.GenerateToken(admin.ID)
+	expiresAt := time.Now().Add(time.Hour * 1).Unix()
+	token, err := s.GenerateTokenWithExpiry(admin.ID, expiresAt)
 	if err != nil {
 		return nil, err
 	}
 
 	// 4. Retornar resposta
 	return &models.LoginResponse{
-		Token: token,
-		Admin: *admin,
+		Token:   token,
+		Type:    "Bearer",
+		Expires: expiresAt,
 	}, nil
 }
 
 func (s *AuthService) GenerateToken(adminID string) (string, error) {
-	// Criar claims com expiração de 24h
+	expiresAt := time.Now().Add(time.Hour * 1).Unix()
+	return s.GenerateTokenWithExpiry(adminID, expiresAt)
+}
+
+func (s *AuthService) GenerateTokenWithExpiry(adminID string, expiresAt int64) (string, error) {
+	// Criar claims
 	claims := jwt.MapClaims{
 		"admin_id": adminID,
-		"exp":      time.Now().Add(time.Hour * 1).Unix(),
+		"exp":      expiresAt,
 		"iat":      time.Now().Unix(),
 	}
 
