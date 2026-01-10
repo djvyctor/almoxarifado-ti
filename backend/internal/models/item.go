@@ -7,6 +7,6 @@ type Item struct {
 	Name      string    `json:"name"`
 	Category  string    `json:"category"`
 	Quantity  int       `json:"quantity"`
-	CreatedAt time.Time `jason:"created_at"`
+	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 }

@@ -50,7 +50,7 @@ func (s *AuthService) GenerateToken(adminID string) (string, error) {
 	// Criar claims com expiração de 24h
 	claims := jwt.MapClaims{
 		"admin_id": adminID,
-		"exp":      time.Now().Add(time.Hour * 24).Unix(),
+		"exp":      time.Now().Add(time.Hour * 1).Unix(),
 		"iat":      time.Now().Unix(),
 	}
 
