@@ -4,6 +4,7 @@ import (
 	"almoxarifado-backend/config"
 	"almoxarifado-backend/internal/database"
 	"almoxarifado-backend/internal/handlers"
+	"almoxarifado-backend/internal/middleware"
 	"almoxarifado-backend/internal/repositories"
 	"almoxarifado-backend/internal/services"
 	"log"
@@ -36,6 +37,11 @@ func main() {
 	itemService := services.NewItemService(itemRepo)
 	itemHandler := handlers.NewItemHandler(itemService)
 
+	// auth
+	adminRepo := repositories.NewAdminRepository(db)
+	authService := services.NewAuthService(adminRepo)
+	authHandler := handlers.NewAuthHandler(authService)
+
 	// Rotas
 	mux := http.NewServeMux()
 
@@ -53,15 +59,28 @@ func main() {
 		w.Write([]byte("DB OK"))
 	})
 
-	// Items
-	mux.HandleFunc("/items", func(w http.ResponseWriter, r *http.Request) {
+	// Auth
+	mux.HandleFunc("/auth/login", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == http.MethodPost {
+			authHandler.Login(w, r)
+			return
+		}
+		w.WriteHeader(http.StatusMethodNotAllowed)
+	})
+
+	// Items (protegido)
+	protectedMux := http.NewServeMux()
+	protectedMux.HandleFunc("/items", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodPost {
 			itemHandler.Create(w, r)
 			return
 		}
-
 		w.WriteHeader(http.StatusMethodNotAllowed)
 	})
+
+	// Aplicar middleware de autenticação
+	authMiddleware := middleware.AuthMiddleware(authService)
+	mux.Handle("/items", authMiddleware(protectedMux))
 
 	//CORS Middleware
 	corsHandler := cors.New(cors.Options{
