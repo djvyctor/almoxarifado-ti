@@ -1,14 +1,15 @@
 package main
 
 import (
-	"log"
-	"net/http"
-
 	"almoxarifado-backend/config"
 	"almoxarifado-backend/internal/database"
 	"almoxarifado-backend/internal/handlers"
 	"almoxarifado-backend/internal/repositories"
 	"almoxarifado-backend/internal/services"
+	"log"
+	"net/http"
+
+	"github.com/rs/cors"
 )
 
 func main() {
@@ -62,7 +63,14 @@ func main() {
 		w.WriteHeader(http.StatusMethodNotAllowed)
 	})
 
+	//CORS Middleware
+	corsHandler := cors.New(cors.Options{
+		AllowedOrigins: []string{"*"}, // In production, specify the frontend domain
+		AllowedMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders: []string{"*"},
+	}).Handler(mux)
+
 	// Iniciando o servidor
 	log.Printf("🚀 API running on port %s", cfg.AppPort)
-	log.Fatal(http.ListenAndServe(":"+cfg.AppPort, mux))
+	log.Fatal(http.ListenAndServe(":"+cfg.AppPort, corsHandler))
 }
