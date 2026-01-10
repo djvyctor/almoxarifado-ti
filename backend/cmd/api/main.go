@@ -12,10 +12,10 @@ import (
 )
 
 func main() {
-	// Load config
+	// Carregando configuração
 	cfg := config.Load()
 
-	// Connect to database
+	// Conexão com o banco de dados
 	db, err := database.Connect(cfg)
 	if err != nil {
 		log.Fatal("erro ao conectar no banco:", err)
@@ -24,15 +24,15 @@ func main() {
 
 	log.Println("🐘 connected to postgres")
 
-	// Init layers
+	// Inicializando repositórios, serviços e handlers
 	itemRepo := repositories.NewItemRepository(db)
 	itemService := services.NewItemService(itemRepo)
 	itemHandler := handlers.NewItemHandler(itemService)
 
-	// Router
+	// Rotas
 	mux := http.NewServeMux()
 
-	// Health checks
+	// Verificação de saúde
 	mux.HandleFunc("/health", func(w http.ResponseWriter, _ *http.Request) {
 		w.Write([]byte("API OK"))
 	})
@@ -46,7 +46,7 @@ func main() {
 		w.Write([]byte("DB OK"))
 	})
 
-	// Items endpoints
+	// Items
 	mux.HandleFunc("/items", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodPost {
 			itemHandler.Create(w, r)
@@ -56,7 +56,7 @@ func main() {
 		w.WriteHeader(http.StatusMethodNotAllowed)
 	})
 
-	// Start server
+	// Iniciando o servidor
 	log.Printf("🚀 API running on port %s", cfg.AppPort)
 	log.Fatal(http.ListenAndServe(":"+cfg.AppPort, mux))
 }

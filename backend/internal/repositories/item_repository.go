@@ -15,6 +15,6 @@ func NewItemRepository(db *sql.DB) *ItemRepository {
 }
 
 func (r *ItemRepository) Create(item *models.Item) error {
-	// Minimal stub: in future implement INSERT into DB
+	// Futuramente implementar a lógica de inserção no banco de dados
 	return nil
 }
