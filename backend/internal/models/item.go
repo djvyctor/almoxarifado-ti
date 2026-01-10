@@ -1,8 +1,12 @@
 package models
 
+import "time"
+
 type Item struct {
-	ID       int64  `json:"id"`
-	Name     string `json:"name"`
-	Category string `json:"category"`
-	Quantity int    `json:"quantity"`
+	ID        string    `json:"id"`
+	Name      string    `json:"name"`
+	Category  string    `json:"category"`
+	Quantity  int       `json:"quantity"`
+	CreatedAt time.Time `jason:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
 }
