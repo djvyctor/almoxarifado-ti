@@ -84,7 +84,7 @@ func main() {
 
 	//CORS Middleware
 	corsHandler := cors.New(cors.Options{
-		AllowedOrigins: []string{"*"}, // In production, specify the frontend domain
+		AllowedOrigins: []string{"*"},
 		AllowedMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowedHeaders: []string{"*"},
 	}).Handler(mux)
