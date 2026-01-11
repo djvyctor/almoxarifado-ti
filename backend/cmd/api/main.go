@@ -24,13 +24,18 @@ func main() {
 	}
 	defer db.Close()
 
-	log.Println("🐘 connected to postgres")
+	log.Println("connected to postgres")
 
 	// Executando migrations
 	if err := database.RunMigrations(db, cfg.DatabaseURL()); err != nil {
 		log.Fatal("erro ao executar migrations:", err)
 	}
-	log.Println("✅ migrations executed")
+	log.Println("migrations executed")
+
+	// Seed admin padrão
+	if err := database.SeedAdminUser(db, cfg.AdminDefaultPassword); err != nil {
+		log.Fatal("erro ao criar admin padrão:", err)
+	}
 
 	// Inicializando repositórios, serviços e handlers
 	itemRepo := repositories.NewItemRepository(db)
@@ -90,6 +95,6 @@ func main() {
 	}).Handler(mux)
 
 	// Iniciando o servidor
-	log.Printf("🚀 API running on port %s", cfg.AppPort)
+	log.Printf("API running on port %s", cfg.AppPort)
 	log.Fatal(http.ListenAndServe(":"+cfg.AppPort, corsHandler))
 }
