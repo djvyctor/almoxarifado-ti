@@ -80,12 +80,34 @@ func main() {
 			itemHandler.Create(w, r)
 			return
 		}
+		if r.Method == http.MethodGet {
+			itemHandler.GetAll(w, r)
+			return
+		}
+		w.WriteHeader(http.StatusMethodNotAllowed)
+	})
+
+	// Rota para obter item por ID
+	protectedMux.HandleFunc("/items/", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == http.MethodGet {
+			itemHandler.GetByID(w, r)
+			return
+		}
+		if r.Method == http.MethodPut {
+			itemHandler.Update(w, r)
+			return
+		}
+		if r.Method == http.MethodDelete {
+			itemHandler.Delete(w, r)
+			return
+		}
 		w.WriteHeader(http.StatusMethodNotAllowed)
 	})
 
 	// Aplicar middleware de autenticação
 	authMiddleware := middleware.AuthMiddleware(authService)
 	mux.Handle("/items", authMiddleware(protectedMux))
+	mux.Handle("/items/", authMiddleware(protectedMux))
 
 	//CORS Middleware
 	corsHandler := cors.New(cors.Options{

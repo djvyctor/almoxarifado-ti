@@ -30,3 +30,49 @@ func (s *ItemService) Create(item *models.Item) error {
 
 	return s.repo.Create(item)
 }
+
+func (s *ItemService) GetAll() ([]models.Item, error) {
+	return s.repo.FindAll()
+}
+
+func (s *ItemService) GetByID(id string) (*models.Item, error) {
+	if id == "" {
+		return nil, errors.New("id is required")
+	}
+	return s.repo.FindByID(id)
+}
+
+func (s *ItemService) Update(id string, item *models.Item) error {
+	if id == "" {
+		return errors.New("id is required")
+	}
+
+	if item.Name == "" {
+		return errors.New("name is required")
+	}
+
+	if item.Category == "" {
+		return errors.New("category is required")
+	}
+
+	if item.Quantity < 0 {
+		return errors.New("quantity cannot be negative")
+	}
+
+	// Verificar se o item existe
+	_, err := s.repo.FindByID(id)
+	if err != nil {
+		return err
+	}
+
+	item.ID = id
+	return s.repo.Update(item)
+}
+
+func (s *ItemService) Delete(id string) error {
+	if id == "" {
+		return errors.New("id is required")
+	}
+
+	return s.repo.Delete(id)
+}
