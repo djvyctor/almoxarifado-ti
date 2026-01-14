@@ -10,14 +10,16 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-var jwtSecret = []byte("your-secret-key-change-in-production") // Mover para ENV depois
-
 type AuthService struct {
 	adminRepo *repositories.AdminRepository
+	jwtSecret []byte
 }
 
-func NewAuthService(adminRepo *repositories.AdminRepository) *AuthService {
-	return &AuthService{adminRepo: adminRepo}
+func NewAuthService(adminRepo *repositories.AdminRepository, jwtSecret string) *AuthService {
+	return &AuthService{
+		adminRepo: adminRepo,
+		jwtSecret: []byte(jwtSecret),
+	}
 }
 
 func (s *AuthService) Login(username, password string) (*models.LoginResponse, error) {
@@ -65,7 +67,7 @@ func (s *AuthService) GenerateTokenWithExpiry(adminID string, expiresAt int64) (
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
 	// Assinar token
-	tokenString, err := token.SignedString(jwtSecret)
+	tokenString, err := token.SignedString(s.jwtSecret)
 	if err != nil {
 		return "", err
 	}
@@ -80,7 +82,7 @@ func (s *AuthService) ValidateToken(tokenString string) (string, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, errors.New("método de assinatura inválido")
 		}
-		return jwtSecret, nil
+		return s.jwtSecret, nil
 	})
 
 	if err != nil {

@@ -44,7 +44,7 @@ func main() {
 
 	// auth
 	adminRepo := repositories.NewAdminRepository(db)
-	authService := services.NewAuthService(adminRepo)
+	authService := services.NewAuthService(adminRepo, cfg.JWTSecret)
 	authHandler := handlers.NewAuthHandler(authService)
 
 	// Rotas
@@ -105,9 +105,8 @@ func main() {
 	})
 
 	// Aplicar middleware de autenticação
-	authMiddleware := middleware.AuthMiddleware(authService)
-	mux.Handle("/items", authMiddleware(protectedMux))
-	mux.Handle("/items/", authMiddleware(protectedMux))
+	mux.Handle("/items", middleware.AuthMiddleware(authService)(protectedMux))
+	mux.Handle("/items/", middleware.AuthMiddleware(authService)(protectedMux))
 
 	//CORS Middleware
 	corsHandler := cors.New(cors.Options{

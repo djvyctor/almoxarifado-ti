@@ -16,6 +16,7 @@ type Config struct {
 	DBPassword           string
 	DBName               string
 	AdminDefaultPassword string
+	JWTSecret            string
 }
 
 func Load() *Config {
@@ -32,6 +33,7 @@ func Load() *Config {
 		DBPassword:           getEnv("DB_PASSWORD", ""),
 		DBName:               getEnv("DB_NAME", "postgres"),
 		AdminDefaultPassword: getEnv("ADMIN_DEFAULT_PASSWORD", ""),
+		JWTSecret:            getEnv("JWT_SECRET", "SCCP@1910_sccp@1910"),
 	}
 
 	return cfg
