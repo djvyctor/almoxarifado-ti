@@ -16,18 +16,6 @@ func NewItemService(repo *repositories.ItemRepository) *ItemService {
 }
 
 func (s *ItemService) Create(item *models.Item) error {
-	if item.Name == "" {
-		return errors.New("name is required")
-	}
-
-	if item.Category == "" {
-		return errors.New("category is required")
-	}
-
-	if item.Quantity < 0 {
-		return errors.New("quantity cannot be negative")
-	}
-
 	return s.repo.Create(item)
 }
 
@@ -45,18 +33,6 @@ func (s *ItemService) GetByID(id string) (*models.Item, error) {
 func (s *ItemService) Update(id string, item *models.Item) error {
 	if id == "" {
 		return errors.New("id is required")
-	}
-
-	if item.Name == "" {
-		return errors.New("name is required")
-	}
-
-	if item.Category == "" {
-		return errors.New("category is required")
-	}
-
-	if item.Quantity < 0 {
-		return errors.New("quantity cannot be negative")
 	}
 
 	// Verificar se o item existe

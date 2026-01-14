@@ -6,6 +6,7 @@ import (
 
 	"almoxarifado-backend/internal/models"
 	"almoxarifado-backend/internal/services"
+	"almoxarifado-backend/internal/utils"
 )
 
 type ItemHandler struct {
@@ -21,6 +22,12 @@ func (h *ItemHandler) Create(w http.ResponseWriter, r *http.Request) {
 
 	if err := json.NewDecoder(r.Body).Decode(&item); err != nil {
 		http.Error(w, "invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	// Validar struct
+	if err := utils.ValidateStruct(&item); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
@@ -81,6 +88,12 @@ func (h *ItemHandler) Update(w http.ResponseWriter, r *http.Request) {
 	var item models.Item
 	if err := json.NewDecoder(r.Body).Decode(&item); err != nil {
 		http.Error(w, "invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	// Validar struct
+	if err := utils.ValidateStruct(&item); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 

@@ -22,9 +22,9 @@ func NewAuthService(adminRepo *repositories.AdminRepository, jwtSecret string) *
 	}
 }
 
-func (s *AuthService) Login(username, password string) (*models.LoginResponse, error) {
+func (s *AuthService) Login(email, password string) (*models.LoginResponse, error) {
 	// 1. Buscar admin
-	admin, err := s.adminRepo.FindByUsername(username)
+	admin, err := s.adminRepo.FindByEmail(email)
 	if err != nil {
 		return nil, errors.New("credenciais inválidas")
 	}

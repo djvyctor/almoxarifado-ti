@@ -13,13 +13,13 @@ func NewAdminRepository(db *sql.DB) *AdminRepository {
 	return &AdminRepository{DB: db}
 }
 
-func (r *AdminRepository) FindByUsername(username string) (*models.Admin, error) {
+func (r *AdminRepository) FindByEmail(email string) (*models.Admin, error) {
 	admin := &models.Admin{}
 
 	err := r.DB.QueryRow(
-		"SELECT id, username, password_hash, created_at FROM admins WHERE username = $1",
-		username,
-	).Scan(&admin.ID, &admin.Username, &admin.PasswordHash, &admin.CreatedAt)
+		"SELECT id, email, password_hash, created_at FROM admins WHERE email = $1",
+		email,
+	).Scan(&admin.ID, &admin.Email, &admin.PasswordHash, &admin.CreatedAt)
 	if err != nil {
 		return nil, err
 	}

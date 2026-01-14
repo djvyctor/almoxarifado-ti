@@ -3,6 +3,7 @@ package handlers
 import (
 	"almoxarifado-backend/internal/models"
 	"almoxarifado-backend/internal/services"
+	"almoxarifado-backend/internal/utils"
 	"encoding/json"
 	"net/http"
 )
@@ -24,15 +25,22 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// 2. Chamar authService.Login()
-	response, err := h.authService.Login(loginReq.Username, loginReq.Password)
+	// 2. Validar struct
+	if err := utils.ValidateStruct(&loginReq); err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
+		return
+	}
+
+	// 3. Chamar authService.Login()
+	response, err := h.authService.Login(loginReq.Email, loginReq.Password)
 	if err != nil {
 		w.WriteHeader(http.StatusUnauthorized)
 		json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
 		return
 	}
 
-	// 3. Retornar token
+	// 4. Retornar token
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(response)

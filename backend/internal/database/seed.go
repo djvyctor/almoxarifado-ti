@@ -9,10 +9,10 @@ import (
 )
 
 // SEED ADMIN PADRÃO
-func SeedAdminUser(db *sql.DB, defaultPassword string) error {
+func SeedAdminUser(db *sql.DB, defaultEmail, defaultPassword string) error {
 	// Verificar se já existe um admin
 	var count int
-	err := db.QueryRow("SELECT COUNT(*) FROM admins WHERE username = $1", "admin").Scan(&count)
+	err := db.QueryRow("SELECT COUNT(*) FROM admins WHERE email = $1", defaultEmail).Scan(&count)
 	if err != nil {
 		return err
 	}
@@ -36,14 +36,14 @@ func SeedAdminUser(db *sql.DB, defaultPassword string) error {
 
 	// Inserir admin padrão
 	_, err = db.Exec(`
-		INSERT INTO admins (id, username, password_hash)
+		INSERT INTO admins (id, email, password_hash)
 		VALUES ($1, $2, $3)
-	`, uuid.New().String(), "admin", string(passwordHash))
+	`, uuid.New().String(), defaultEmail, string(passwordHash))
 
 	if err != nil {
 		return err
 	}
 
-	log.Println("default admin user created (username: admin, password: " + defaultPassword + ")")
+	log.Println("default admin user created (email: " + defaultEmail + ", password: " + defaultPassword + ")")
 	return nil
 }

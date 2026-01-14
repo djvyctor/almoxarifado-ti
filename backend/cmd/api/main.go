@@ -33,7 +33,7 @@ func main() {
 	log.Println("migrations executed")
 
 	// Seed admin padrão
-	if err := database.SeedAdminUser(db, cfg.AdminDefaultPassword); err != nil {
+	if err := database.SeedAdminUser(db, cfg.AdminDefaultEmail, cfg.AdminDefaultPassword); err != nil {
 		log.Fatal("erro ao criar admin padrão:", err)
 	}
 

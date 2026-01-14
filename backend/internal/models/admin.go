@@ -4,14 +4,14 @@ import "time"
 
 type Admin struct {
 	ID           string    `json:"id"`
-	Username     string    `json:"username"`
+	Email        string    `json:"email"`
 	PasswordHash string    `json:"-"` // "-" não expõe no JSON
 	CreatedAt    time.Time `json:"created_at"`
 }
 
 type LoginRequest struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
+	Email    string `json:"email" validate:"required,email"`
+	Password string `json:"password" validate:"required,min=6"`
 }
 
 type LoginResponse struct {

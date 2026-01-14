@@ -43,7 +43,7 @@ func (r *ItemRepository) FindAll() ([]models.Item, error) {
 	}
 	defer rows.Close()
 
-	var items []models.Item
+	items := make([]models.Item, 0)
 	for rows.Next() {
 		var item models.Item
 		err := rows.Scan(
