@@ -20,25 +20,32 @@ type Config struct {
 	JWTSecret            string
 }
 
-func Load() *Config {
+func Load() (*Config, error) {
 	err := godotenv.Load()
 	if err != nil {
 		log.Println(".env not found, using system environment variables")
 	}
 
 	cfg := &Config{
-		AppPort:              getEnv("APP_PORT", "8080"),
-		DBHost:               getEnv("DB_HOST", "localhost"),
-		DBPort:               getEnv("DB_PORT", "5432"),
-		DBUser:               getEnv("DB_USER", "postgres"),
+		AppPort:              getEnv("APP_PORT", ""),
+		DBHost:               getEnv("DB_HOST", ""),
+		DBPort:               getEnv("DB_PORT", ""),
+		DBUser:               getEnv("DB_USER", ""),
 		DBPassword:           getEnv("DB_PASSWORD", ""),
-		DBName:               getEnv("DB_NAME", "postgres"),
-		AdminDefaultEmail:    getEnv("ADMIN_DEFAULT_EMAIL", "admin@almoxarifado.com"),
+		DBName:               getEnv("DB_NAME", ""),
+		AdminDefaultEmail:    getEnv("ADMIN_DEFAULT_EMAIL", ""),
 		AdminDefaultPassword: getEnv("ADMIN_DEFAULT_PASSWORD", ""),
-		JWTSecret:            getEnv("JWT_SECRET", "SCCP@1910_sccp@1910"),
+		JWTSecret:            getEnv("JWT_SECRET", ""),
 	}
 
-	return cfg
+	// Vou implementar uma validação simples, se faltar algo, o app não inicia
+	if cfg.JWTSecret == "" {
+		return nil, fmt.Errorf("FATAL: A variavel de ambiente JWT_SECRET é obrigatória.")
+	}
+	if cfg.DBPassword == "" {
+		return nil, fmt.Errorf("AVISO: Rodando sem senha de banco de dados meu brodi!!!")
+	}
+	return cfg, nil
 }
 
 func getEnv(key, defaultValue string) string {
