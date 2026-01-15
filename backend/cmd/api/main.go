@@ -15,7 +15,10 @@ import (
 
 func main() {
 	// Carregando configuração
-	cfg := config.Load()
+	cfg, err := config.Load()
+	if err != nil {
+		log.Fatal("erro ao carregar configuração:", err) // Coloquei isso pq se faltar JWT ouDB password o app não inicia
+	}
 
 	// Conexão com o banco de dados
 	db, err := database.Connect(cfg)

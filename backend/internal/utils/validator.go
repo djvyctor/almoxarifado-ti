@@ -13,11 +13,11 @@ func init() {
 	validate = validator.New()
 }
 
-// ValidateStruct valida um struct usando as tags de validação
+// ValidateStruct valida um struct usando as tags
 func ValidateStruct(s interface{}) error {
 	err := validate.Struct(s)
 	if err != nil {
-		// Formatar mensagens de erro de forma amigável
+		// Formatar mensagens de erro
 		var messages []string
 		for _, err := range err.(validator.ValidationErrors) {
 			messages = append(messages, formatValidationError(err))
@@ -27,24 +27,24 @@ func ValidateStruct(s interface{}) error {
 	return nil
 }
 
-// formatValidationError formata erros de validação de forma legível
+// formata erros de validação de forma legível
 func formatValidationError(err validator.FieldError) string {
 	field := strings.ToLower(err.Field())
 
 	switch err.Tag() {
 	case "required":
-		return fmt.Sprintf("%s is required", field)
+		return fmt.Sprintf("%s é obrigatório", field)
 	case "email":
-		return fmt.Sprintf("%s must be a valid email", field)
+		return fmt.Sprintf("%s deve ser um e-mail válido", field)
 	case "min":
-		return fmt.Sprintf("%s must be at least %s characters", field, err.Param())
+		return fmt.Sprintf("%s deve ter no mínimo %s caracteres", field, err.Param())
 	case "max":
-		return fmt.Sprintf("%s must be at most %s characters", field, err.Param())
+		return fmt.Sprintf("%s deve ter no máximo %s caracteres", field, err.Param())
 	case "gte":
-		return fmt.Sprintf("%s must be greater than or equal to %s", field, err.Param())
+		return fmt.Sprintf("%s deve ser maior ou igual a %s", field, err.Param())
 	case "lte":
-		return fmt.Sprintf("%s must be less than or equal to %s", field, err.Param())
+		return fmt.Sprintf("%s deve ser menor ou igual a %s", field, err.Param())
 	default:
-		return fmt.Sprintf("%s is invalid", field)
+		return fmt.Sprintf("%s é inválido", field)
 	}
 }
