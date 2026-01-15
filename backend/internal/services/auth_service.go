@@ -23,30 +23,38 @@ func NewAuthService(adminRepo *repositories.AdminRepository, jwtSecret string) *
 }
 
 func (s *AuthService) Login(email, password string) (*models.LoginResponse, error) {
-	// 1. Buscar admin
+	// Buscar admin
 	admin, err := s.adminRepo.FindByEmail(email)
+
+	// Sempre verificar senha mesmo que o admin não exista
+	var passwordHash string
 	if err != nil {
-		return nil, errors.New("credenciais inválidas")
+		// Usando HASH fake
+		passwordHash = "$2a$10$XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+	} else {
+		passwordHash = admin.PasswordHash
 	}
 
-	// 2. Comparar senha
-	err = bcrypt.CompareHashAndPassword([]byte(admin.PasswordHash), []byte(password))
-	if err != nil {
-		return nil, errors.New("credenciais inválidas")
+	// Verificar senha
+	bytesErr := bcrypt.CompareHashAndPassword([]byte(passwordHash), []byte(password))
+
+	// Verifica se houve erro na busca ou na senha
+	if err != nil || bytesErr != nil {
+		return nil, errors.New("email ou senha inválidos")
 	}
 
-	// 3. Gerar token
-	expiresAt := time.Now().Add(time.Hour * 1).Unix()
-	token, err := s.GenerateTokenWithExpiry(admin.ID, expiresAt)
+	// Gerar token
+	expiresAT := time.Now().Add(time.Hour * 1).Unix()
+	token, err := s.GenerateTokenWithExpiry(admin.ID, expiresAT)
 	if err != nil {
 		return nil, err
 	}
 
-	// 4. Retornar resposta
+	// Retornar resposta
 	return &models.LoginResponse{
 		Token:   token,
 		Type:    "Bearer",
-		Expires: expiresAt,
+		Expires: expiresAT,
 	}, nil
 }
 
@@ -79,7 +87,7 @@ func (s *AuthService) ValidateToken(tokenString string) (string, error) {
 	// Parse token
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		// Verificar método de assinatura
-		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+		if token.Method.Alg() != jwt.SigningMethodHS256.Alg() {
 			return nil, errors.New("método de assinatura inválido")
 		}
 		return s.jwtSecret, nil

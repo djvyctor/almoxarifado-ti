@@ -1,0 +1,71 @@
+package middleware
+
+import (
+	"encoding/json"
+	"net/http"
+	"sync"
+	"time"
+
+	"golang.org/x/time/rate"
+)
+
+type visitor struct {
+	limiter  *rate.Limiter
+	lastSeen time.Time
+}
+
+var (
+	visitors = make(map[string]*visitor)
+	mu       sync.Mutex
+)
+
+// Limpa visitantes antigos a cada 3 minutos
+func init() {
+	go cleanupVisitors()
+}
+
+func cleanupVisitors() {
+	for {
+		time.Sleep(time.Minute * 3)
+		mu.Lock()
+		for ip, v := range visitors {
+			if time.Since(v.lastSeen) > 3*time.Minute {
+				delete(visitors, ip)
+			}
+		}
+		mu.Unlock()
+	}
+}
+
+func getVisitor(ip string) *rate.Limiter {
+	mu.Lock()
+	defer mu.Unlock()
+
+	v, exists := visitors[ip]
+	if !exists {
+		// 5 requisições por minuto
+		limiter := rate.NewLimiter(rate.Every(time.Minute/5), 5)
+		visitors[ip] = &visitor{limiter, time.Now()}
+		return limiter
+	}
+
+	v.lastSeen = time.Now()
+	return v.limiter
+}
+
+func RateLimitMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		ip := r.RemoteAddr
+		limiter := getVisitor(ip)
+
+		if !limiter.Allow() {
+			w.WriteHeader(http.StatusTooManyRequests)
+			json.NewEncoder(w).Encode(map[string]string{
+				"error": "muitas tentativas, tente novamente mais tarde",
+			})
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	})
+}

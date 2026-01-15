@@ -67,14 +67,16 @@ func main() {
 		w.Write([]byte("DB OK"))
 	})
 
-	// Auth
-	mux.HandleFunc("/auth/login", func(w http.ResponseWriter, r *http.Request) {
+	// Auth com Rate Limiter
+	loginMux := http.NewServeMux()
+	loginMux.HandleFunc("/auth/login", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodPost {
 			authHandler.Login(w, r)
 			return
 		}
 		w.WriteHeader(http.StatusMethodNotAllowed)
 	})
+	mux.Handle("/auth/login", middleware.RateLimitMiddleware(loginMux))
 
 	// Items (protegido)
 	protectedMux := http.NewServeMux()
@@ -113,9 +115,11 @@ func main() {
 
 	//CORS Middleware
 	corsHandler := cors.New(cors.Options{
-		AllowedOrigins: []string{"*"},
-		AllowedMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowedHeaders: []string{"*"},
+		// Lembrar de quando for fazer o front com Vue, colocar o link certo no Origins
+		AllowedOrigins:   []string{"http://localhost:3000", "http://localhost:5173"},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"Content-Type", "Authorization"},
+		AllowCredentials: true,
 	}).Handler(mux)
 
 	// Iniciando o servidor

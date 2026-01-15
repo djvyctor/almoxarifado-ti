@@ -44,6 +44,7 @@ func SeedAdminUser(db *sql.DB, defaultEmail, defaultPassword string) error {
 		return err
 	}
 
-	log.Println("default admin user created (email: " + defaultEmail + ", password: " + defaultPassword + ")")
+	// Para não vazar a senha no log coloquei assim.
+	log.Println("Usuario administrador padrão criado com sucesso")
 	return nil
 }
