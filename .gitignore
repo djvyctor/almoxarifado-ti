@@ -35,7 +35,13 @@ Dockerfile.dev
 # Frontend
 /frontend/node_modules/
 /frontend/dist/
+/frontend/dist-ssr/
 /frontend/build/
+/frontend/.vite/
+/frontend/coverage/
+/frontend/.env
+/frontend/.env.local
+/frontend/.env.*.local
 
 # Misc
 .history/
