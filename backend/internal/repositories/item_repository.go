@@ -16,12 +16,12 @@ func NewItemRepository(db *sql.DB) *ItemRepository {
 
 func (r *ItemRepository) Create(item *models.Item) error {
 	query := `
-        INSERT INTO items (name, category, quantity)
-        VALUES ($1, $2, $3)
+        INSERT INTO items (name, category, patrimony, assigned_to, description, value, quantity)
+        VALUES ($1, $2, $3, $4, $5, $6, $7)
         RETURNING id, created_at, updated_at
     `
 
-	err := r.db.QueryRow(query, item.Name, item.Category, item.Quantity).
+	err := r.db.QueryRow(query, item.Name, item.Category, item.Patrimony, item.AssignedTo, item.Description, item.Value, item.Quantity).
 		Scan(&item.ID, &item.CreatedAt, &item.UpdatedAt)
 
 	if err != nil {
@@ -33,7 +33,7 @@ func (r *ItemRepository) Create(item *models.Item) error {
 
 func (r *ItemRepository) FindAll() ([]models.Item, error) {
 	query := `
-		SELECT id, name, category, quantity, created_at, updated_at
+		SELECT id, name, category, patrimony, assigned_to, description, value, quantity, created_at, updated_at
 		FROM items
 		ORDER BY created_at DESC`
 
@@ -50,6 +50,10 @@ func (r *ItemRepository) FindAll() ([]models.Item, error) {
 			&item.ID,
 			&item.Name,
 			&item.Category,
+			&item.Patrimony,
+			&item.AssignedTo,
+			&item.Description,
+			&item.Value,
 			&item.Quantity,
 			&item.CreatedAt,
 			&item.UpdatedAt,
@@ -65,7 +69,7 @@ func (r *ItemRepository) FindAll() ([]models.Item, error) {
 
 func (r *ItemRepository) FindByID(id string) (*models.Item, error) {
 	query := `
-		SELECT id, name, category, quantity, created_at, updated_at
+		SELECT id, name, category, patrimony, assigned_to, description, value, quantity, created_at, updated_at
 		FROM items
 		WHERE id = $1
 	`
@@ -75,6 +79,10 @@ func (r *ItemRepository) FindByID(id string) (*models.Item, error) {
 		&item.ID,
 		&item.Name,
 		&item.Category,
+		&item.Patrimony,
+		&item.AssignedTo,
+		&item.Description,
+		&item.Value,
 		&item.Quantity,
 		&item.CreatedAt,
 		&item.UpdatedAt,
@@ -93,8 +101,8 @@ func (r *ItemRepository) FindByID(id string) (*models.Item, error) {
 func (r *ItemRepository) Update(item *models.Item) error {
 	query := `
 		UPDATE items
-		SET name = $1, category = $2, quantity = $3, updated_at = NOW()
-		WHERE id = $4
+		SET name = $1, category = $2, patrimony = $3, assigned_to = $4, description = $5, value = $6, quantity = $7, updated_at = NOW()
+		WHERE id = $8
 		RETURNING updated_at
 	`
 
@@ -102,6 +110,10 @@ func (r *ItemRepository) Update(item *models.Item) error {
 		query,
 		item.Name,
 		item.Category,
+		item.Patrimony,
+		item.AssignedTo,
+		item.Description,
+		item.Value,
 		item.Quantity,
 		item.ID,
 	).Scan(&item.UpdatedAt)

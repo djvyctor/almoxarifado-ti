@@ -45,6 +45,11 @@ func main() {
 	itemService := services.NewItemService(itemRepo)
 	itemHandler := handlers.NewItemHandler(itemService)
 
+	// users
+	userRepo := repositories.NewUserRepository(db)
+	userService := services.NewUserService(userRepo)
+	userHandler := handlers.NewUserHandler(userService)
+
 	// auth
 	adminRepo := repositories.NewAdminRepository(db)
 	authService := services.NewAuthService(adminRepo, cfg.JWTSecret)
@@ -112,6 +117,47 @@ func main() {
 	// Aplicar middleware de autenticação
 	mux.Handle("/items", middleware.AuthMiddleware(authService)(protectedMux))
 	mux.Handle("/items/", middleware.AuthMiddleware(authService)(protectedMux))
+
+	// Users (protegido)
+	usersMux := http.NewServeMux()
+	usersMux.HandleFunc("/users", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == http.MethodPost {
+			userHandler.CreateUser(w, r)
+			return
+		}
+		if r.Method == http.MethodGet {
+			userHandler.GetAllUsers(w, r)
+			return
+		}
+		w.WriteHeader(http.StatusMethodNotAllowed)
+	})
+
+	usersMux.HandleFunc("/users/linked-items", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == http.MethodGet {
+			userHandler.GetLinkedItemsCount(w, r)
+			return
+		}
+		w.WriteHeader(http.StatusMethodNotAllowed)
+	})
+
+	usersMux.HandleFunc("/users/", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == http.MethodGet {
+			userHandler.GetUserByID(w, r)
+			return
+		}
+		if r.Method == http.MethodPut {
+			userHandler.UpdateUser(w, r)
+			return
+		}
+		if r.Method == http.MethodDelete {
+			userHandler.DeleteUser(w, r)
+			return
+		}
+		w.WriteHeader(http.StatusMethodNotAllowed)
+	})
+
+	mux.Handle("/users", middleware.AuthMiddleware(authService)(usersMux))
+	mux.Handle("/users/", middleware.AuthMiddleware(authService)(usersMux))
 
 	//CORS Middleware
 	corsHandler := cors.New(cors.Options{
