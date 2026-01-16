@@ -1,12 +1,7 @@
 <template>
-  <div id="app">
-    <router-view />
-  </div>
+  <router-view />
 </template>
 
-<style scoped>
-#app {
-  min-height: 100vh;
-  width: 100%;
-}
-</style>
+<script setup>
+// Não precisa de nada aqui por enquanto
+</script>
