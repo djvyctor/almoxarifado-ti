@@ -1,31 +1,62 @@
 <template>
-  <div class="app-layout">
-    <header class="header">
-      <div class="header-content">
-        <h1>Almoxarifado TI</h1>
-        <div class="user-menu">
-          <span>Olá, Admin</span>
-          <button @click="handleLogout" class="logout-btn">Sair</button>
+  <div class="min-h-screen bg-slate-50 flex">
+    <aside class="hidden md:flex flex-col w-64 bg-slate-900 text-white fixed h-full z-20">
+      <div class="h-16 flex items-center px-6 border-b border-slate-800">
+        <div class="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg mr-3 flex items-center justify-center">
+          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+          </svg>
         </div>
+        <span class="font-bold text-lg tracking-wide">Almoxarifado</span>
       </div>
-    </header>
 
-    <div class="main-container">
-      <aside class="sidebar">
-        <nav>
-          <router-link to="/" class="nav-item">
-            <span>🏠</span> Home
-          </router-link>
-          <router-link to="/items" class="nav-item">
-            <span>📦</span> Itens
-          </router-link>
-        </nav>
-      </aside>
+      <nav class="flex-1 py-6 px-3 space-y-1">
+        <router-link 
+          to="/" 
+          class="flex items-center px-4 py-3 rounded-xl transition-all group"
+          active-class="bg-purple-600 text-white shadow-lg shadow-purple-500/30"
+          :class="$route.path === '/' ? '' : 'text-slate-400 hover:bg-slate-800 hover:text-white'"
+        >
+          <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+          </svg>
+          Dashboard
+        </router-link>
 
-      <main class="content">
-        <slot></slot>
-      </main>
-    </div>
+        <router-link 
+          to="/items" 
+          class="flex items-center px-4 py-3 rounded-xl transition-all group"
+          active-class="bg-purple-600 text-white shadow-lg shadow-purple-500/30"
+          :class="$route.path.includes('/items') ? '' : 'text-slate-400 hover:bg-slate-800 hover:text-white'"
+        >
+          <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+          </svg>
+          Estoque
+        </router-link>
+      </nav>
+
+      <div class="p-4 border-t border-slate-800">
+        <button 
+          @click="handleLogout"
+          class="flex items-center w-full px-4 py-2 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors"
+        >
+          <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+          </svg>
+          Sair do Sistema
+        </button>
+      </div>
+    </aside>
+
+    <main class="flex-1 md:ml-64 transition-all">
+      <div class="md:hidden h-16 bg-slate-900 text-white flex items-center justify-between px-4">
+        <span class="font-bold">Almoxarifado</span>
+        </div>
+
+      <slot></slot>
+      
+    </main>
   </div>
 </template>
 
@@ -37,99 +68,7 @@ const router = useRouter()
 const authStore = useAuthStore()
 
 const handleLogout = () => {
-  authStore.logout()
+  authStore.logout() // Certifique-se que sua store tem essa action
   router.push('/login')
 }
 </script>
-
-<style scoped>
-.app-layout {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-.header {
-  background-color: #2c3e50;
-  color: white;
-  padding: 1rem 2rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.header-content {
-  max-width: 1400px;
-  margin: 0 auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.header h1 {
-  margin: 0;
-  font-size: 1.5rem;
-}
-
-.user-menu {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.logout-btn {
-  padding: 0.5rem 1rem;
-  background-color: #e74c3c;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.9rem;
-}
-
-.logout-btn:hover {
-  background-color: #c0392b;
-}
-
-.main-container {
-  flex: 1;
-  display: flex;
-  max-width: 1400px;
-  width: 100%;
-  margin: 0 auto;
-}
-
-.sidebar {
-  width: 250px;
-  background-color: #34495e;
-  padding: 2rem 0;
-}
-
-.sidebar nav {
-  display: flex;
-  flex-direction: column;
-}
-
-.nav-item {
-  padding: 1rem 2rem;
-  color: #ecf0f1;
-  text-decoration: none;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  transition: background-color 0.2s;
-}
-
-.nav-item:hover {
-  background-color: #2c3e50;
-}
-
-.nav-item.router-link-active {
-  background-color: #2c3e50;
-  border-left: 4px solid #3498db;
-}
-
-.content {
-  flex: 1;
-  padding: 2rem;
-  background-color: #ecf0f1;
-}
-</style>
