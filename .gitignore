@@ -1,4 +1,6 @@
 .env
+.env.production
+.env.*.local
 
 # Go binaries and build output
 *.exe
@@ -6,21 +8,22 @@
 *.so
 *.dylib
 *.out
+/backend/api
+/backend/cmd/api/api
 
 # Go build directories
 /bin/
 /pkg/
+/backend/bin/
 
 # Vendor directory
 vendor/
 
-# Environment files
-.env.local
-.env.*.local
-
 # Docker
 docker-compose.override.yml
 Dockerfile.dev
+*.log
+/postgres_data/
 
 # IDEs
 .vscode/
@@ -31,10 +34,7 @@ Dockerfile.dev
 
 # Logs
 *.log
-
-# Frontend
-/frontend/node_modules/
-/frontend/dist/
+rontend/dist/
 /frontend/dist-ssr/
 /frontend/build/
 /frontend/.vite/
@@ -48,4 +48,10 @@ Dockerfile.dev
 Thumbs.db
 
 # Prevent committing compiled api binary
-/api
+/apiGo workspace
+go.work
+go.work.sum
+
+# Test coverage
+coverage.out
+*.test
