@@ -55,10 +55,9 @@ func (h *ItemHandler) GetAll(w http.ResponseWriter, r *http.Request) {
 
 func (h *ItemHandler) GetByID(w http.ResponseWriter, r *http.Request) {
 	// Extrair ID da URL
-	id := r.URL.Path[len("/items/"):]
-
-	if id == "" {
-		http.Error(w, "id is required", http.StatusBadRequest)
+	id, err := utils.ExtractAndValidateID(r.URL.Path, "/items/")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
@@ -78,10 +77,9 @@ func (h *ItemHandler) GetByID(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *ItemHandler) Update(w http.ResponseWriter, r *http.Request) {
-	id := r.URL.Path[len("/items/"):]
-
-	if id == "" {
-		http.Error(w, "id is required", http.StatusBadRequest)
+	id, err := utils.ExtractAndValidateID(r.URL.Path, "/items/")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
@@ -112,10 +110,9 @@ func (h *ItemHandler) Update(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *ItemHandler) Delete(w http.ResponseWriter, r *http.Request) {
-	id := r.URL.Path[len("/items/"):]
-
-	if id == "" {
-		http.Error(w, "id is required", http.StatusBadRequest)
+	id, err := utils.ExtractAndValidateID(r.URL.Path, "/items/")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 

@@ -3,9 +3,9 @@ package handlers
 import (
 	"almoxarifado-backend/internal/models"
 	"almoxarifado-backend/internal/services"
+	"almoxarifado-backend/internal/utils"
 	"encoding/json"
 	"net/http"
-	"strings"
 
 	"github.com/go-playground/validator/v10"
 )
@@ -57,9 +57,9 @@ func (h *UserHandler) GetAllUsers(w http.ResponseWriter, r *http.Request) {
 
 func (h *UserHandler) GetUserByID(w http.ResponseWriter, r *http.Request) {
 	// Extrai o ID do path /users/{id}
-	id := strings.TrimPrefix(r.URL.Path, "/users/")
-	if id == "" {
-		http.Error(w, "ID é obrigatório", http.StatusBadRequest)
+	id, err := utils.ExtractAndValidateID(r.URL.Path, "/users/")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
@@ -75,9 +75,9 @@ func (h *UserHandler) GetUserByID(w http.ResponseWriter, r *http.Request) {
 
 func (h *UserHandler) UpdateUser(w http.ResponseWriter, r *http.Request) {
 	// Extrai o ID do path /users/{id}
-	id := strings.TrimPrefix(r.URL.Path, "/users/")
-	if id == "" {
-		http.Error(w, "ID é obrigatório", http.StatusBadRequest)
+	id, err := utils.ExtractAndValidateID(r.URL.Path, "/users/")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
@@ -123,9 +123,9 @@ func (h *UserHandler) GetLinkedItemsCount(w http.ResponseWriter, r *http.Request
 
 func (h *UserHandler) DeleteUser(w http.ResponseWriter, r *http.Request) {
 	// Extrai o ID do path /users/{id}
-	id := strings.TrimPrefix(r.URL.Path, "/users/")
-	if id == "" {
-		http.Error(w, "ID é obrigatório", http.StatusBadRequest)
+	id, err := utils.ExtractAndValidateID(r.URL.Path, "/users/")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
