@@ -35,10 +35,10 @@ func Load() (*Config, error) {
 		DBName:               getEnv("DB_NAME", ""),
 		AdminDefaultEmail:    getEnv("ADMIN_DEFAULT_EMAIL", ""),
 		AdminDefaultPassword: getEnv("ADMIN_DEFAULT_PASSWORD", ""),
-		JWTSecret:            getEnv("JWT_SECRET", ""),
+		JWTSecret:            os.Getenv("JWT_SECRET"),
 	}
 
-	// Vou implementar uma validação simples, se faltar algo, o app não inicia
+	// Validações de segurança críticas
 	if cfg.JWTSecret == "" {
 		return nil, fmt.Errorf("FATAL: variaveis de ambiente incompletas ou invalidas.")
 	}

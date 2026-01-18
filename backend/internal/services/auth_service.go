@@ -10,6 +10,9 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+// Hash bcrypt válido para senha dummy (protege contra timing attacks)
+var dummyPasswordHash = "$2a$10$2LYls4E77VunAqYegCFTVuIXBTVyTJ/hMnP5w44TzKqgVkiWjOHza"
+
 type AuthService struct {
 	adminRepo *repositories.AdminRepository
 	jwtSecret []byte
@@ -26,20 +29,20 @@ func (s *AuthService) Login(email, password string) (*models.LoginResponse, erro
 	// Buscar admin
 	admin, err := s.adminRepo.FindByEmail(email)
 
-	// Sempre verificar senha mesmo que o admin não exista
-	var passwordHash string
-	if err != nil {
-		// Usando HASH fake
-		passwordHash = "$2a$10$XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-	} else {
+	// SEMPRE verificar senha, mesmo que admin não exista (protege contra timing attacks)
+	passwordHash := dummyPasswordHash
+	adminExists := false
+
+	if err == nil {
 		passwordHash = admin.PasswordHash
+		adminExists = true
 	}
 
-	// Verificar senha
+	// Verificar senha (SEMPRE executa bcrypt, independente se admin existe)
 	bytesErr := bcrypt.CompareHashAndPassword([]byte(passwordHash), []byte(password))
 
-	// Verifica se houve erro na busca ou na senha
-	if err != nil || bytesErr != nil {
+	// Só retorna sucesso se admin existe E senha está correta
+	if !adminExists || bytesErr != nil {
 		return nil, errors.New("email ou senha inválidos")
 	}
 
