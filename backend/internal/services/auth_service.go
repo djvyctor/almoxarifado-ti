@@ -10,7 +10,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-// Hash bcrypt válido para senha dummy (protege contra timing attacks)
+// Hash bcrypt válido para senha dummy
 var dummyPasswordHash = "$2a$10$2LYls4E77VunAqYegCFTVuIXBTVyTJ/hMnP5w44TzKqgVkiWjOHza"
 
 type AuthService struct {
@@ -29,7 +29,7 @@ func (s *AuthService) Login(email, password string) (*models.LoginResponse, erro
 	// Buscar admin
 	admin, err := s.adminRepo.FindByEmail(email)
 
-	// SEMPRE verificar senha, mesmo que admin não exista (protege contra timing attacks)
+	// SEMPRE verificar senha mesmo que admin não exista
 	passwordHash := dummyPasswordHash
 	adminExists := false
 
