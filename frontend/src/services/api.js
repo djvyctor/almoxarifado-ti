@@ -5,16 +5,35 @@ const api = axios.create({
     baseURL: API_URL,
     headers: {
         'Content-Type': 'application/json',
-    }
+    },
+    withCredentials: true
 })
 
-// Interceptor para adicionar token JWT em todas as requisições
+// Função para ler cookie
+function getCookie(name) {
+  const value = `; ${document.cookie}`
+  const parts = value.split(`; ${name}=`)
+  if (parts.length === 2) return parts.pop().split(';').shift()
+  return null
+}
+
+// Interceptor
 api.interceptors.request.use(
   (config) => {
+    // Adicionar JWT
     const token = localStorage.getItem('token')
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
     }
+    
+    // Adiciona token para métodos que modificam dados
+    if (['post', 'put', 'delete', 'patch'].includes(config.method.toLowerCase())) {
+      const csrfToken = getCookie('csrf-token')
+      if (csrfToken) {
+        config.headers['X-CSRF-Token'] = csrfToken
+      }
+    }
+    
     return config
   },
   (error) => {

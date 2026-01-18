@@ -40,7 +40,7 @@ func main() {
 		log.Fatal("erro ao criar admin padrão:", err)
 	}
 
-	// Inicializando repositórios, serviços e handlers
+	// Inicializando repositórios serviços e handlers
 	itemRepo := repositories.NewItemRepository(db)
 	itemService := services.NewItemService(itemRepo)
 	itemHandler := handlers.NewItemHandler(itemService)
@@ -83,7 +83,7 @@ func main() {
 	})
 	mux.Handle("/auth/login", middleware.RateLimitMiddleware(loginMux))
 
-	// Items (protegido)
+	// Items
 	protectedMux := http.NewServeMux()
 	protectedMux.HandleFunc("/items", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodPost {
@@ -114,11 +114,11 @@ func main() {
 		w.WriteHeader(http.StatusMethodNotAllowed)
 	})
 
-	// Aplicar middleware de autenticação
-	mux.Handle("/items", middleware.AuthMiddleware(authService)(protectedMux))
-	mux.Handle("/items/", middleware.AuthMiddleware(authService)(protectedMux))
+	// Aplicar middleware de autenticação CSRF
+	mux.Handle("/items", middleware.CSRFMiddleware(middleware.AuthMiddleware(authService)(protectedMux)))
+	mux.Handle("/items/", middleware.CSRFMiddleware(middleware.AuthMiddleware(authService)(protectedMux)))
 
-	// Users (protegido)
+	// Users
 	usersMux := http.NewServeMux()
 	usersMux.HandleFunc("/users", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodPost {
@@ -156,15 +156,15 @@ func main() {
 		w.WriteHeader(http.StatusMethodNotAllowed)
 	})
 
-	mux.Handle("/users", middleware.AuthMiddleware(authService)(usersMux))
-	mux.Handle("/users/", middleware.AuthMiddleware(authService)(usersMux))
+	mux.Handle("/users", middleware.CSRFMiddleware(middleware.AuthMiddleware(authService)(usersMux)))
+	mux.Handle("/users/", middleware.CSRFMiddleware(middleware.AuthMiddleware(authService)(usersMux)))
 
 	//CORS Middleware
 	corsHandler := cors.New(cors.Options{
 		// Lembrar de quando for fazer o front com Vue, colocar o link certo no Origins
 		AllowedOrigins:   []string{"http://localhost:3000", "http://localhost:5173"},
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowedHeaders:   []string{"Content-Type", "Authorization"},
+		AllowedHeaders:   []string{"Content-Type", "Authorization", "X-CSRF-Token"},
 		AllowCredentials: true,
 	}).Handler(mux)
 

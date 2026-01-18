@@ -1,6 +1,11 @@
+# Environment variables (CRÍTICO - Contém JWT_SECRET e DB_PASSWORD)
 .env
 .env.production
 .env.*.local
+backend/.env
+frontend/.env
+frontend/.env.local
+frontend/.env.*.local
 
 # Go binaries and build output
 *.exe
@@ -10,6 +15,8 @@
 *.out
 /backend/api
 /backend/cmd/api/api
+/backend/*.exe
+almoxarifado-ti.exe
 
 # Go build directories
 /bin/
@@ -19,39 +26,49 @@
 # Vendor directory
 vendor/
 
-# Docker
-docker-compose.override.yml
-Dockerfile.dev
-*.log
-/postgres_data/
-
-# IDEs
-.vscode/
-.idea/
-
-# macOS
-.DS_Store
-
-# Logs
-*.log
-rontend/dist/
-/frontend/dist-ssr/
-/frontend/build/
-/frontend/.vite/
-/frontend/coverage/
-/frontend/.env
-/frontend/.env.local
-/frontend/.env.*.local
-
-# Misc
-.history/
-Thumbs.db
-
-# Prevent committing compiled api binary
-/apiGo workspace
+# Go workspace
 go.work
 go.work.sum
 
 # Test coverage
 coverage.out
 *.test
+
+# Docker
+docker-compose.override.yml
+Dockerfile.dev
+/postgres_data/
+*.log
+
+# Frontend (Node.js / Vue)
+node_modules/
+/frontend/node_modules/
+/frontend/dist/
+/frontend/dist-ssr/
+/frontend/build/
+/frontend/.vite/
+/frontend/coverage/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# IDEs
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS
+.DS_Store
+Thumbs.db
+.history/
+
+# Certificates (se contiverem chaves privadas)
+# backend/certs/*.key
+# backend/certs/*.pem
