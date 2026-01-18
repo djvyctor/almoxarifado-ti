@@ -1,10 +1,10 @@
 package handlers
 
 import (
-	"almoxarifado-backend/internal/middleware"
-	"almoxarifado-backend/internal/models"
-	"almoxarifado-backend/internal/services"
-	"almoxarifado-backend/internal/utils"
+	"corvi-backend/internal/middleware"
+	"corvi-backend/internal/models"
+	"corvi-backend/internal/services"
+	"corvi-backend/internal/utils"
 	"encoding/json"
 	"log"
 	"net/http"

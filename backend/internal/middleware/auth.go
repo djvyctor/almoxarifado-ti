@@ -1,8 +1,8 @@
 package middleware
 
 import (
-	"almoxarifado-backend/internal/services"
 	"context"
+	"corvi-backend/internal/services"
 	"encoding/json"
 	"net/http"
 	"strings"

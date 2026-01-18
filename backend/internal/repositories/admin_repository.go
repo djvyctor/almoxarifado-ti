@@ -1,7 +1,7 @@
 package repositories
 
 import (
-	"almoxarifado-backend/internal/models"
+	"corvi-backend/internal/models"
 	"database/sql"
 )
 

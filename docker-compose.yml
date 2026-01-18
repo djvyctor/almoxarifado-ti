@@ -1,7 +1,7 @@
 services:
   postgres:
     image: postgres:16
-    container_name: almoxarifado_postgres
+    container_name: corvi_postgres
     restart: always
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
@@ -20,7 +20,7 @@ services:
   api:
     build:
       context: ./backend
-    container_name: almoxarifado_api
+    container_name: corvi_api
     restart: always
     ports:
       - "8080:8080"

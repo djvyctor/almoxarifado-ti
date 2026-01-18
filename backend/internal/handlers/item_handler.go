@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"almoxarifado-backend/internal/models"
-	"almoxarifado-backend/internal/services"
-	"almoxarifado-backend/internal/utils"
+	"corvi-backend/internal/models"
+	"corvi-backend/internal/services"
+	"corvi-backend/internal/utils"
 )
 
 type ItemHandler struct {

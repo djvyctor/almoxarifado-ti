@@ -1,4 +1,4 @@
-# 📦 Sistema de Almoxarifado TI
+# 📦 Sistema Corvi
 
 > Sistema completo de gerenciamento de estoque e patrimônio para o setor de TI, desenvolvido com **Go**, **Vue.js** e **PostgreSQL**.
 

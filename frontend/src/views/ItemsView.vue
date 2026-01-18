@@ -11,7 +11,7 @@
         <div class="flex gap-3">
           <button
             @click="openModal()"
-            class="inline-flex items-center px-5 py-2.5 rounded-xl text-white font-medium bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 shadow-lg shadow-purple-500/20 transition-all hover:scale-105 active:scale-95"
+            class="inline-flex items-center px-5 py-2.5 rounded-xl text-white font-medium bg-linear-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 shadow-lg shadow-purple-500/20 transition-all hover:scale-105 active:scale-95"
           >
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -30,7 +30,7 @@
         leave-to-class="transform -translate-y-2 opacity-0"
       >
         <div v-if="successMessage" class="mb-6 p-4 bg-green-50 border border-green-200 rounded-xl flex items-center text-green-700 shadow-sm">
-          <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+          <svg class="w-5 h-5 mr-3 shrink-0" fill="currentColor" viewBox="0 0 20 20">
             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
           </svg>
           {{ successMessage }}
@@ -38,7 +38,7 @@
       </Transition>
 
       <div v-if="itemsStore.error" class="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl flex items-center text-red-700 shadow-sm">
-        <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+        <svg class="w-5 h-5 mr-3 shrink-0" fill="currentColor" viewBox="0 0 20 20">
           <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
         </svg>
         {{ itemsStore.error }}
@@ -97,7 +97,7 @@
           class="group bg-white rounded-xl border-2 border-slate-200 p-4 hover:shadow-lg hover:shadow-purple-500/10 hover:border-purple-500 transition-all duration-300 flex items-center gap-4"
         >
           <!-- Ícone -->
-          <div class="p-3 bg-slate-50 rounded-xl group-hover:bg-purple-50 transition-colors flex-shrink-0">
+          <div class="p-3 bg-slate-50 rounded-xl group-hover:bg-purple-50 transition-colors shrink-0">
             <svg class="w-6 h-6 text-slate-400 group-hover:text-purple-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
             </svg>
@@ -136,7 +136,7 @@
           </div>
 
           <!-- Quantidade -->
-          <div class="flex-shrink-0">
+          <div class="shrink-0">
             <div :class="[
               'px-4 py-2 rounded-lg text-sm font-bold border-2',
               item.quantity < 5 
@@ -148,7 +148,7 @@
           </div>
 
           <!-- Ações -->
-          <div class="flex gap-2 flex-shrink-0">
+          <div class="flex gap-2 shrink-0">
             <button
               @click="startEdit(item)"
               class="p-2.5 text-slate-600 bg-slate-50 rounded-lg hover:bg-indigo-50 hover:text-indigo-600 transition-all"
@@ -186,7 +186,7 @@
           </svg>
         </div>
         <h3 class="text-lg font-medium text-slate-900">Nenhum item encontrado</h3>
-        <p class="text-slate-500 mb-6">Comece adicionando itens ao seu almoxarifado.</p>
+        <p class="text-slate-500 mb-6">Comece adicionando itens ao seu sistema.</p>
         <button
           @click="openModal()"
           class="text-indigo-600 font-medium hover:text-indigo-700 hover:underline"
@@ -327,7 +327,7 @@
                         class="w-full px-4 py-2.5 text-left hover:bg-indigo-50 transition-colors border-b border-slate-100 last:border-b-0"
                       >
                         <div class="flex items-center gap-2">
-                          <svg class="w-4 h-4 text-indigo-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <svg class="w-4 h-4 text-indigo-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                           </svg>
                           <div class="flex-1 min-w-0">

@@ -1,7 +1,7 @@
 package database
 
 import (
-	"almoxarifado-backend/config"
+	"corvi-backend/config"
 	"database/sql"
 	"fmt"
 	"os"
@@ -50,6 +50,16 @@ func RunMigrations(db *sql.DB, dbURL string) error {
 
 	if _, err := db.Exec(string(migration2)); err != nil {
 		return fmt.Errorf("erro ao executar migration 002: %v", err)
+	}
+
+	// Ler e executar 003_create_users_table.sql
+	migration3, err := os.ReadFile("internal/database/migrations/003_create_users_table.sql")
+	if err != nil {
+		return fmt.Errorf("erro ao ler migration 003: %v", err)
+	}
+
+	if _, err := db.Exec(string(migration3)); err != nil {
+		return fmt.Errorf("erro ao executar migration 003: %v", err)
 	}
 
 	return nil

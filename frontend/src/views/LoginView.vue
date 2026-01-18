@@ -1,7 +1,7 @@
 <template>
   <div class="fixed inset-0 w-full h-full bg-slate-900 flex items-center justify-center overflow-hidden font-sans selection:bg-purple-500 selection:text-white">
     
-    <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-purple-900/20 to-slate-900 z-0"></div>
+    <div class="absolute inset-0 bg-linear-to-br from-slate-900 via-purple-900/20 to-slate-900 z-0"></div>
 
     <div class="absolute inset-0 overflow-hidden pointer-events-none z-0">
       <div class="absolute top-0 left-1/4 w-96 h-96 bg-purple-500 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-blob"></div>
@@ -13,13 +13,13 @@
       <div class="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl p-8 transform transition-all">
         
         <div class="text-center mb-8">
-          <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-tr from-purple-500 to-pink-500 rounded-xl mb-4 shadow-lg shadow-purple-500/20 group hover:scale-105 transition-transform duration-300">
+          <div class="inline-flex items-center justify-center w-16 h-16 bg-linear-to-tr from-purple-500 to-pink-500 rounded-xl mb-4 shadow-lg shadow-purple-500/20 group hover:scale-105 transition-transform duration-300">
             <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
             </svg>
           </div>
-          <h1 class="text-3xl font-bold text-white tracking-tight">Almoxarifado TI</h1>
-          <p class="text-slate-400 mt-2 text-sm">Gerencie seu estoque e patrimonio</p>
+          <h1 class="text-3xl font-bold text-white tracking-tight">Corvi.com</h1>
+          <p class="text-slate-400 mt-2 text-sm">Gerencie seu estoque e patrimônio</p>
         </div>
 
         <form @submit.prevent="handleLogin" class="space-y-6">
@@ -33,9 +33,11 @@
                 </svg>
               </div>
               <input 
-                id="email" 
+                id="email"
+                name="email"
                 v-model="email" 
-                type="email" 
+                type="email"
+                autocomplete="email"
                 required 
                 class="input-glass w-full pl-11 pr-4 py-3 bg-slate-800/50 border border-slate-600 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all text-sm"
                 placeholder="nome@empresa.com"
@@ -52,9 +54,11 @@
                 </svg>
               </div>
               <input 
-                id="password" 
+                id="password"
+                name="password"
                 v-model="password" 
-                :type="showPassword ? 'text' : 'password'" 
+                :type="showPassword ? 'text' : 'password'"
+                autocomplete="current-password"
                 required 
                 class="input-glass w-full pl-11 pr-12 py-3 bg-slate-800/50 border border-slate-600 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all text-sm"
                 placeholder="••••••••"
@@ -76,7 +80,7 @@
           </div>
 
           <div v-if="authStore.error" class="p-3 rounded-lg bg-red-500/10 border border-red-500/20 flex items-center gap-3">
-             <svg class="h-5 w-5 text-red-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+             <svg class="h-5 w-5 text-red-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
              </svg>
              <span class="text-sm text-red-200">{{ authStore.error }}</span>

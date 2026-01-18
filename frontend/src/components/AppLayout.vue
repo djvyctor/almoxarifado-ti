@@ -2,12 +2,12 @@
   <div class="min-h-screen bg-slate-50 flex">
     <aside class="hidden md:flex flex-col w-64 bg-slate-900 text-white fixed h-full z-20">
       <div class="h-16 flex items-center px-6 border-b border-slate-800">
-        <div class="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg mr-3 flex items-center justify-center">
+        <div class="w-8 h-8 bg-linear-to-br from-purple-500 to-pink-500 rounded-lg mr-3 flex items-center justify-center">
           <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
           </svg>
         </div>
-        <span class="font-bold text-lg tracking-wide">Almoxarifado</span>
+        <span class="font-bold text-lg tracking-wide">Corvi.com</span>
       </div>
 
       <nav class="flex-1 py-6 px-3 space-y-1">
@@ -63,7 +63,7 @@
 
     <main class="flex-1 md:ml-64 transition-all">
       <div class="md:hidden h-16 bg-slate-900 text-white flex items-center justify-between px-4">
-        <span class="font-bold">Almoxarifado</span>
+        <span class="font-bold">Corvi.com</span>
         </div>
 
       <slot></slot>

@@ -1,12 +1,12 @@
 package main
 
 import (
-	"almoxarifado-backend/config"
-	"almoxarifado-backend/internal/database"
-	"almoxarifado-backend/internal/handlers"
-	"almoxarifado-backend/internal/middleware"
-	"almoxarifado-backend/internal/repositories"
-	"almoxarifado-backend/internal/services"
+	"corvi-backend/config"
+	"corvi-backend/internal/database"
+	"corvi-backend/internal/handlers"
+	"corvi-backend/internal/middleware"
+	"corvi-backend/internal/repositories"
+	"corvi-backend/internal/services"
 	"log"
 	"net/http"
 

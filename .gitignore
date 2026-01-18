@@ -16,7 +16,7 @@ frontend/.env.*.local
 /backend/api
 /backend/cmd/api/api
 /backend/*.exe
-almoxarifado-ti.exe
+corvi.exe
 
 # Go build directories
 /bin/

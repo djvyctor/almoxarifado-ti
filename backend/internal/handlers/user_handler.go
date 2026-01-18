@@ -1,9 +1,9 @@
 package handlers
 
 import (
-	"almoxarifado-backend/internal/models"
-	"almoxarifado-backend/internal/services"
-	"almoxarifado-backend/internal/utils"
+	"corvi-backend/internal/models"
+	"corvi-backend/internal/services"
+	"corvi-backend/internal/utils"
 	"encoding/json"
 	"net/http"
 
@@ -39,7 +39,6 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(user)
 }

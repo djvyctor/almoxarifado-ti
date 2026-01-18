@@ -3,8 +3,8 @@ package services
 import (
 	"errors"
 
-	"almoxarifado-backend/internal/models"
-	"almoxarifado-backend/internal/repositories"
+	"corvi-backend/internal/models"
+	"corvi-backend/internal/repositories"
 )
 
 type ItemService struct {

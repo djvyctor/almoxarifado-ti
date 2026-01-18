@@ -7,7 +7,7 @@
           <h1 class="text-3xl font-bold text-slate-800 tracking-tight">
             Olá, Administrador 👋
           </h1>
-          <p class="text-slate-500 mt-1">Aqui está o resumo do seu almoxarifado hoje.</p>
+          <p class="text-slate-500 mt-1">Aqui está o resumo do seu sistema hoje.</p>
         </div>
         <div class="hidden md:flex items-center gap-2 text-sm text-slate-400 bg-white px-4 py-2 rounded-full shadow-sm border border-slate-100">
           <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -128,7 +128,7 @@
           <div class="space-y-3 flex-1">
             <router-link 
               to="/items"
-              class="w-full flex items-center p-3 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white hover:shadow-lg transition-all hover:scale-[1.02]"
+              class="w-full flex items-center p-3 rounded-xl bg-linear-to-r from-indigo-500 to-purple-600 text-white hover:shadow-lg transition-all hover:scale-[1.02]"
             >
               <div class="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center mr-3">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
